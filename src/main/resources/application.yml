@@ -16,6 +16,10 @@ spring:
     hibernate:
       ddl-auto: update # 자동 DDL 설정 옵션 -> create로 설정하면 클래스 모양대로 테이블 자동 생성.
     database: mysql # DB 계열 설정
+  servlet:
+    multipart:
+      max-file-size: 10MB # 1개의 파일의 최대 사이즈
+      max-request-size: 20MB # 전체 요청의 최대 사이즈
 
 # swagger setting
 springdoc:
@@ -24,3 +28,7 @@ springdoc:
 
 jwt:
   secret: sjJvaPOA7ewe49BWPGzEpdlgUYJc+vHRhhZRkIB76CVlInWNiZlV9WYqL8xCqx61b4nwEpAQ3X3ZZhHvICJx7A==
+
+# upload file path
+upload:
+  path: D:/todo_upload
