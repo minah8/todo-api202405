@@ -29,10 +29,10 @@ public class GlobalExceptionHandler {
      */
 
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
+//        return ResponseEntity.badRequest().body(e.getMessage());
+//    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleRuntimeException(IllegalArgumentException e) {
