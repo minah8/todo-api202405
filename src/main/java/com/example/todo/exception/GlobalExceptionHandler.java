@@ -29,13 +29,14 @@ public class GlobalExceptionHandler {
      */
 
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler({RuntimeException.class, NoRegisteredArgumentException.class})
     public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handleRuntimeException(IllegalArgumentException e) {
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.info("handleIllegalArgumentException 호출!");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 
