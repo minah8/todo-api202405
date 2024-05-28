@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private List<String> permitAllPatterns;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    public void serPermitAllPatterns(List<String> permitAllPatterns) {
+    public void setPermitAllPatterns(List<String> permitAllPatterns) {
         this.permitAllPatterns = permitAllPatterns;
     }
     
@@ -51,8 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
         log.info("isPermitAllUrl: {}", isPermitAllUrl);
 
-        if (isPermitAllUrl) {
+        if (isPermitAllUrl && !requestURI.contains("load-profile")) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         // 토큰 위조검사 및 인증 완료 처리

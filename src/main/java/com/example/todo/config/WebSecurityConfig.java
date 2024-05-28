@@ -1,6 +1,5 @@
 package com.example.todo.config;
 
-import com.example.todo.exception.CustomAccessDeniedHandler;
 import com.example.todo.exception.CustomAuthenticationEntryPoint;
 import com.example.todo.filter.JWTExceptionFilter;
 import com.example.todo.filter.JwtAuthFilter;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.SessionManagementDsl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final JWTExceptionFilter jwtExceptionFilter;
-    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final AccessDeniedHandler accessDeniedHandler;
     private final RequestProperties properties;
 
     // 시큐리티 기본 설정 (권한처리, 초기 로그인 화면 없애기 ....)
@@ -44,7 +43,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // yml에서 가져온 허용 url 리스트를 jwtAuthFilter에게 전달
-        jwtAuthFilter.serPermitAllPatterns(properties.getPermitAllPatterns());
+        jwtAuthFilter.setPermitAllPatterns(properties.getPermitAllPatterns());
         log.info("리스트: {}", properties.getPermitAllPatterns());
         log.info("배열로 변환: {}", Arrays.toString(properties.getPermitAllPatterns().toArray()));
 
@@ -75,7 +74,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/api/auth/promote").authenticated()
                                 .requestMatchers("/api/auth/load-profile").authenticated()
                                 // '/api/auth'로 시작하는 요청과 '/'요청은 권한 검사 없이 허용하겠다.
-                                .requestMatchers(Arrays.toString(properties.getPermitAllPatterns().toArray()).split(","))
+                                .requestMatchers(Arrays.toString(properties.getPermitAllPatterns().toArray()).split(", "))
                                 .permitAll()
                                 // 위에서 따로 설정하지 않은 나머지 요청들은 권한 검사가 필요하다.
                                 .anyRequest().authenticated()
